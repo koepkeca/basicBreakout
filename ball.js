@@ -70,37 +70,40 @@ ball = {
     vx: 1,
     vy: 1,
     draw: function ()
-          {
-              grad = ctx.createLinearGradient(0,0,0,8);
-              grad.addColorStop(0,"green");
-              grad.addColorStop(1,"darkgreen");
-              ctx.beginPath();
-              ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
-              ctx.fillStyle = this.color;
-              ctx.fill();
-              ctx.closePath();
-          },
-   move: function ()
-         {
-             this.y += this.vy;
-             this.x += this.vx;
-         },
-  changeXDirection: function ()
-                    {
-                        this.vx *= -1;
-                    },
-  changeYDirection: function ()
-                    {
-                        this.vy *= -1;
-                    },     
-  randomizeStart: function ()
-                    {
-                        this.x = Math.floor((Math.random() * W) + ball.radius);
-                        this.y = Math.floor((Math.random() * H) + ball.radius);
-                    }
+    {
+        grad = ctx.createLinearGradient(0,0,0,8);
+        grad.addColorStop(0,"green");
+        grad.addColorStop(1,"darkgreen");
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+        return;
+    },
+    move: function ()
+    {
+        this.y += this.vy;
+        this.x += this.vx;
+        return;
+    },
+    changeXDirection: function ()
+    {
+        this.vx *= -1;
+        return;
+    },
+    changeYDirection: function ()
+    {
+        this.vy *= -1;
+        return;
+    },     
+    randomizeStart: function ()
+    { 
+        this.x = Math.floor((Math.random() * W) + ball.radius);
+        this.y = Math.floor((Math.random() * H) + ball.radius);
+        return;
+    }
 };
-
-
 
 /* Utility functions for managing the blocks */
 
