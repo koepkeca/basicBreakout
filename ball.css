@@ -1,0 +1,17 @@
+#canvas
+{
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display:block;
+    background-color:black;
+    border: 2px solid white;
+    margin-top: 160px;
+}
+
+body
+{
+    background-image: url('space2.jpg');
+    font-size:18px;
+}

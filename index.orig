@@ -1,0 +1,223 @@
+<html>
+ <head>
+  <title>Ball</title>
+  <link rel="stylesheet" type="text/css" href="ball.css"/>
+  <canvas id="canvas"></canvas>
+  DEBUG<div id="debug"></div>
+  <script type="text/javascript">
+  document.onkeydown = function(e)
+  {
+      switch (e.keyCode)
+      {
+          case 37:
+              padX -= 8;
+              if (padX < 0)
+              {
+                  padX = 0;
+              }
+              break;
+          case 39:
+              padX += 8;
+              if (padX > (W - currPadWidth))
+              {
+                  padX = (W - currPadWidth);
+              }
+              break;
+      }
+  }
+  var blockArray = [];
+  var canvas = document.getElementById("canvas");
+  ctx = canvas.getContext("2d");
+  var W = 720, H = 480;
+  var blockRows = 6;
+  var blockCols = 6;
+  canvas.height = H;
+  canvas.width = W;
+  currPadWidth = 96;
+  padX = 480;
+  var speedLimit = 2.5;
+  var ball = {}
+  var bounceFactor = 1;
+  ball = {
+      x: 0,
+      y: 0,
+      radius: 6,
+      color: "green",
+      vx: 1,
+      vy: 1,
+      draw: function ()
+            {
+                ctx.beginPath();
+                ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.closePath();
+            },
+     move: function ()
+           {
+               this.y += this.vy;
+               this.x += this.vx;
+           },
+     changeXDirection: function ()
+                       {
+                           this.vx *= -1;
+                       },
+     changeYDirection: function ()
+                       {
+                           this.vy *= -1;
+                       },     
+     randomizeStart: function ()
+                       {
+                           this.x = Math.floor((Math.random() * W) + 1);
+                           this.y = Math.floor((Math.random() * H) + 1);
+                       }
+   };
+
+   function buildBlockArray()
+   {
+      for (n = 0; n < blockCols; n++)
+      {
+          blockArray[n] = [];
+          for (i = 0; i < blockRows; i++)
+          {
+              blockArray[n][i] = 1;
+          }
+      }
+   }
+
+   function drawBlocks()
+   {
+      for (n = 0; n < blockCols; n++)
+      {
+          for (i = 0; i < blockRows; i++)
+          {
+              ctx.beginPath();
+              ctx.rect((i * 120),(n * 16),120,16);
+              ctx.lineWidth = 2;
+              ctx.fillStyle = 'red';
+              ctx.strokeStyle = 'black';
+              if (blockArray[n][i] == 1)
+              {
+                  ctx.fill();
+                  ctx.stroke();
+              }
+          }
+      }
+      return;
+   }
+
+   function drawPlayerPad()
+   {
+       ctx.beginPath();
+       ctx.rect(padX,420,currPadWidth,8);
+       ctx.lineWidth = 2;
+       ctx.strokeStyle = 'green';
+       ctx.fillStyle = 'black';
+       ctx.fill();
+       ctx.stroke();
+   }
+
+   function clearCanvas()
+   {
+       ctx.clearRect(0,0,W,H);
+   }
+
+   function isSpeedInRange(speedValue)
+   {
+       var rValue = 1;
+       if (speedValue <= (maxBounceFactor * -1))
+       {
+          rValue = 0;
+       }
+       if (speedValue >= maxBounceFactor)
+       {
+           rValue = 0;
+       }
+       return(rValue);
+   }
+ 
+   function incrementBounceFactor()
+   {
+       bounceFactor *= 1.00125;
+   }
+
+   function resetBlock()
+   {
+       arrXCoord = Math.floor(ball.x / 120);
+       arrYCoord = Math.floor(ball.y / 16);
+       if ((arrXCoord < blockRows) && (arrYCoord < blockCols))
+       {
+           blockArray[arrYCoord][arrXCoord] = 0;
+       }
+   }
+
+   function isBallAtBlock()
+   {
+       var retValue = 0;
+       arrXCoord = Math.floor(ball.x / 120);
+       arrYCoord = Math.floor(ball.y / 16);
+       if ((arrXCoord < blockRows) && (arrYCoord < blockCols))
+       {
+           retValue = blockArray[arrYCoord][arrXCoord];
+           resetBlock();
+       }
+       return retValue;
+   }
+
+   function isBallAtPad()
+   {
+       retValue = 0;
+       if (Math.floor(ball.y + ball.radius) == 420)
+       {
+           if ((Math.floor(ball.x + ball.radius) >= padX) && (Math.floor(ball.x + ball.radius) <= (padX + currPadWidth)))
+           {
+               retValue = 1;
+           }
+       }
+       return retValue;
+   }
+
+   function update()
+   {
+      clearCanvas();
+      ball.draw();
+      drawBlocks();
+      drawPlayerPad();
+      //move the ball
+      ball.move();
+      //bottomCollision
+      if ((ball.y + ball.radius >= H) || isBallAtBlock() || isBallAtPad())
+      {
+          ball.changeYDirection();
+          incrementBounceFactor();
+          if (ball.y + ball.radius >= H)
+          {
+              alert('You have lost a ball');
+              ball.randomizeStart();
+          }
+      } else
+      //Right Collision
+      if ((ball.x + ball.radius >= W) || isBallAtBlock())
+      {
+          ball.changeXDirection();
+          incrementBounceFactor();
+      } else
+      //Left Collision
+      if ((ball.x - ball.radius <= 0) || isBallAtBlock())
+      {
+          ball.changeXDirection();
+          incrementBounceFactor();
+      } else
+      //Top Collision
+      if ((ball.y - ball.radius <= 0) || isBallAtBlock())
+      {
+          ball.changeYDirection();
+          incrementBounceFactor();
+      }
+   }
+   buildBlockArray();
+   ball.randomizeStart();
+   setInterval(update,1000/60);
+  </script>
+ </head>
+</html>
