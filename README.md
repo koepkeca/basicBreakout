@@ -6,7 +6,8 @@
  a demo of a bouncing ball [http://cssdeck.com/labs/lets-make-a-bouncing-ball-in-html5-canvas] <br/>
  and decided to make a basic breakout. <br/>
  Just a fun project I like to work on when I'm burned out from work. <br/>
- TODO: <br/>
+ <b>TODO:</b> <br/>
+    <ul>
      <li>Pad needs to be an object.</li>
      <li>Blocks needs to be an object.</li>
      <li>Speed needs to increment on level or bounce (haven't decided)</li>
@@ -16,4 +17,4 @@
          the block. Need to make the radius affect block collisions</li>
      <li>Add levels of different sized/colors blocks</li>
      <li>Maybe add a score or something</li>
-
+    </ul>
